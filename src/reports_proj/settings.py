@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'reports',
     'sales',
     #3rd parties
+    'crispy_forms'
     
 ]
 
