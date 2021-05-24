@@ -1,3 +1,4 @@
+from typing import List
 from django.contrib import auth
 from django.core.checks import messages
 from django.forms.fields import JSONField
@@ -9,7 +10,16 @@ from django.contrib.auth.decorators import login_required
 from .utils import get_report_image
 from .models import Report
 from .forms import ReportForm
+from django.views.generic import ListView, DetailView
 # Create your views here.
+
+class ReportListView(ListView):
+    model = Report
+    template_name = 'reports/main.html'
+
+class ReportDetailView(DetailView):
+    model = Report
+    template_name = 'reports/detail.html'
 
 @login_required
 def create_report_view(request):
