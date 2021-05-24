@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Sale
 from .forms import SalesSearchForm
+from reports.forms import ReportForm
 import pandas as pd
 from .utils import get_customer_from_id, get_salesman_from_id, get_chart
 # Create your views here.
@@ -15,12 +16,16 @@ def home_view(request):
     merged_df = None
     df = None
     chart = None
-    form = SalesSearchForm(request.POST or None)
+    no_data = None
+
+    search_form = SalesSearchForm(request.POST or None)
+    report_form = ReportForm()
 
     if request.method == "POST":
         date_from = request.POST.get('date_from')
         date_to = request.POST.get('date_to')
         chart_type = request.POST.get('chart_type')
+        results_by = request.POST.get('results_by')
         #print(date_from, date_to, chart_type)
 
         sale_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
@@ -49,24 +54,26 @@ def home_view(request):
 
             df = merged_df.groupby('transaction_id', as_index=False)['price'].agg('sum')
             
-            chart = get_chart(chart_type, df, labels=df['transaction_id'].values)
+            chart = get_chart(chart_type, sales_df, results_by)
             print('chart', chart)
             sales_df = sales_df.to_html()
             positions_df = positions_df.to_html()
             merged_df = merged_df.to_html()
             df = df.to_html()
-            print(sales_df)
+            
         else:
-            print('no data')
+            no_data = "No Data Available in This Date Range"
 
 
     context = {
-        'form': form,
+        'search_form': search_form,
+        'report_form': report_form,
         'sales_df': sales_df,
         'positions_df':positions_df,
         'merged_df':merged_df,
         'df':df,
         'chart':chart,
+        'no_data':no_data,
     }
     return render(request, 'sales/home.html', context)
 
