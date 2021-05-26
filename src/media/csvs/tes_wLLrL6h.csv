@@ -1,0 +1,9 @@
+Pos,Transaction_id,Product,Quantity,Customer,Date
+1,E100,TV,5,Trial,2021-05-22
+2,E100,Laptop,4,Trial,2021-05-22
+3,E100,TV,3,Trial,2021-05-22
+4,E100,Laptop,4,Trial,2021-05-23
+5,E100,Smartphone,2,Trial,2021-05-23
+6,E100,Smartphone,1,Paijo,2021-05-23
+7,E100,Laptop,2,Paijo,2021-05-24
+8,E100,TV,4,Paijo,2021-05-24
